@@ -1,0 +1,38 @@
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      schema: backyardleague
+    url: ${DB_URL}
+    username: ${DB_LOGIN}
+    password: ${DB_PASSWORD}
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    database: postgresql
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+  liquibase:
+    change-log: classpath:changelog/change-logs.xml
+springdoc:
+  swagger-ui:
+    path: /docs
+    default-model-rendering: example
+    validator-url: none
+    operations-sorter: alpha
+    tags-sorter: alpha
+    enabled: true
+  api-docs:
+    enabled: true
+server:
+  port: 8443
+jwt:
+  key: ${JWT_SIGNATURE}
+  access-token-expiration-time: 900000
+  refresh-token-expiration-time: 3600000
+  audience: http://localhost
+  issuer: http://localhost
+account:
+  salt: ${ACCOUNT_SALT}
+  pepper: ${ACCOUNT_PEPPER}
