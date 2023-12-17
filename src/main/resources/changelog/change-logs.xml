@@ -4,5 +4,6 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
 
     <include file="change-set/202312141952_init_changelog.xml" relativeToChangelogFile="true"/>
+    <include file="change-set/202317120948_added_backyardleague_tables.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>

@@ -1,12 +1,10 @@
 package pl.backyard.backyardleaguebackend.core.functionality.user.domain;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import pl.backyard.backyardleaguebackend.core.functionality.common.domain.EntityId;
 import pl.backyard.backyardleaguebackend.core.functionality.role.domain.Role;
+import pl.backyard.backyardleaguebackend.core.functionality.team.domain.UserTeam;
 
 
 import java.time.LocalDate;
@@ -31,6 +29,10 @@ public class User implements EntityId<Long> {
     private String email;
     private LocalDate createdAt = LocalDate.now();
     private boolean enabled;
+
+    @Setter(value = AccessLevel.NONE)
+    @OneToMany(mappedBy = "user")
+    private Set<UserTeam> teams;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinTable(

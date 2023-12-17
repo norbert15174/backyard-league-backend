@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
+
+    <changeSet id="202317120948-1" author="faronnor">
+        <createTable tableName="team">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="type" type="VARCHAR">
+                <constraints nullable="false"/>
+            </column>
+            <column name="points" type="bigint"/>
+            <column name="code" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="202317120948-2" author="faronnor">
+        <createTable tableName="users_team">
+            <column name="user_id" type="BIGINT">
+                <constraints primaryKey="true" nullable="false" primaryKeyName="users_team_pk"/>
+            </column>
+            <column name="team_id" type="BIGINT">
+                <constraints primaryKey="true" nullable="false" primaryKeyName="users_team_pk"/>
+            </column>
+            <column name="role" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="202317120948-3" author="faronnor">
+        <addForeignKeyConstraint baseTableName="users_team" baseColumnNames="user_id"
+                                 constraintName="fk_user_team_user_id"
+                                 referencedTableName="users" referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="users_team" baseColumnNames="team_id"
+                                 constraintName="fk_user_team_team_id"
+                                 referencedTableName="team" referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="202312141952-3" author="faronnor">
+        <createTable tableName="match">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="challenger_id" type="BIGINT">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="challenged_id" type="BIGINT">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="challenger_ids" type="VARCHAR"/>
+            <column name="challenged_ids" type="VARCHAR"/>
+            <column name="challenged_at" type="DATE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="VARCHAR(255)"/>
+            <column name="result_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="202312141952-5" author="faronnor">
+        <createTable tableName="result">
+            <column name="id" type="BIGINT">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="challenger_score" type="INTEGER"/>
+            <column name="challenged_score" type="INTEGER"/>
+            <column name="status" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="202312141952-6" author="faronnor">
+        <addForeignKeyConstraint baseTableName="match" baseColumnNames="challenger_id"
+                                 constraintName="fk_match_challenger_id"
+                                 referencedTableName="team" referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="match" baseColumnNames="challenged_id"
+                                 constraintName="fk_match_challenged_id"
+                                 referencedTableName="team" referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="match" baseColumnNames="result_id"
+                                 constraintName="fk_match_result_id"
+                                 referencedTableName="result" referencedColumnNames="id"/>
+    </changeSet>
+
+</databaseChangeLog>
