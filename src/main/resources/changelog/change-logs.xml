@@ -5,5 +5,6 @@
 
     <include file="change-set/202312141952_init_changelog.xml" relativeToChangelogFile="true"/>
     <include file="change-set/202317120948_added_backyardleague_tables.xml" relativeToChangelogFile="true"/>
+    <include file="change-set/202401201425_added_location_and_comment_to_match.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>
