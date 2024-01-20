@@ -1,11 +1,14 @@
 package pl.backyard.backyardleaguebackend.core.functionality.user.service.crud;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.backyard.backyardleaguebackend.core.functionality.user.domain.User;
 
-import java.util.Objects;
 import java.util.Optional;
 
 @Transactional(readOnly = true)
@@ -16,30 +19,29 @@ class UserQueryServiceImpl implements UserQueryService {
     private final UserRepository userRepository;
 
     @Override
-    public Optional<User> getOptByUsernameOrEmail(String username) {
-        return userRepository.findByUsernameOrEmail(username.toLowerCase());
+    public Optional<User> getOptByUsername(String username) {
+        return userRepository.findOptByUsername(username.toLowerCase());
     }
 
     @Override
-    public Optional<User> getOptByEmail(String email) {
-        return userRepository.findByEmail(email.toLowerCase());
+    public User getByUsername(String username) {
+        return userRepository.findByUsername(username.toLowerCase());
     }
 
     @Override
-    public boolean isNameExist(String name, Optional<Long> idOpt) {
-        var userOpt = getOptByUsernameOrEmail(name);
-        return idOpt
-                .map(aLong -> userOpt.map(user -> !Objects.equals(user.getId(), aLong))
-                        .orElse(false))
-                .orElseGet(userOpt::isPresent);
+    public User getById(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(EntityNotFoundException::new);
     }
 
     @Override
-    public boolean isEmailExist(String name, Optional<Long> idOpt) {
-        var userOpt = getOptByEmail(name);
-        return idOpt
-                .map(aLong -> userOpt.map(user -> !Objects.equals(user.getId(), aLong))
-                        .orElse(false))
-                .orElseGet(userOpt::isPresent);
+    public Page<User> getAll(Specification<User> filter, Pageable pageable) {
+        return userRepository.findAll(filter, pageable);
+    }
+
+    @Override
+    public User getByIdWithTeams(Long id) {
+        return userRepository.findByIdWithTeams(id)
+                .orElseThrow(EntityNotFoundException::new);
     }
 }

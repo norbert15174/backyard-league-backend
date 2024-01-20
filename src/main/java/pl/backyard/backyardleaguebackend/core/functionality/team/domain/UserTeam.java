@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import pl.backyard.backyardleaguebackend.core.functionality.common.domain.EntityId;
 import pl.backyard.backyardleaguebackend.core.functionality.user.domain.User;
 
 import java.io.Serializable;
@@ -16,7 +17,7 @@ import java.util.Objects;
 @NoArgsConstructor
 @Setter
 @Getter
-public class UserTeam implements Serializable {
+public class UserTeam implements Serializable, EntityId<UserTeamId> {
 
     private static final long serialVersionUID = 1L;
 

@@ -23,7 +23,6 @@ public class User implements EntityId<Long> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String username;
-    private String password;
     private String name;
     private String lastname;
     private String email;
@@ -52,6 +51,6 @@ public class User implements EntityId<Long> {
     }
 
     public String getFullName() {
-        return String.format("%s %s (%s)", getName(), getLastname(), getUsername());
+        return String.format("%s %s", getName(), getLastname());
     }
 }

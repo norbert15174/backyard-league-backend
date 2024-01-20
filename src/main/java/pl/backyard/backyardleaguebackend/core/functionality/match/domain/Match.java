@@ -5,12 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import pl.backyard.backyardleaguebackend.core.functionality.result.Result;
+import pl.backyard.backyardleaguebackend.core.functionality.result.domain.Result;
 import pl.backyard.backyardleaguebackend.core.functionality.team.domain.Team;
 
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -32,8 +30,6 @@ public class Match {
     @JoinColumn(name="challenged_id", nullable=false)
     private Team challenged;
 
-    private String challengerIds;
-    private String challengedIds;
     private LocalDate challengedAt = LocalDate.now();
     @Enumerated(EnumType.STRING)
     private MatchStatus status = MatchStatus.REQUESTED;

@@ -15,6 +15,12 @@ spring:
     show-sql: true
   liquibase:
     change-log: classpath:changelog/change-logs.xml
+  security:
+    oauth2:
+      resource-server:
+        jwt:
+          jwk-set-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}/protocol/openid-connect/certs
+          issuer-uri: ${KEY_CLOAK_ISSUER_URL}
 springdoc:
   swagger-ui:
     path: /docs
@@ -27,12 +33,4 @@ springdoc:
     enabled: true
 server:
   port: 8443
-jwt:
-  key: ${JWT_SIGNATURE}
-  access-token-expiration-time: 900000
-  refresh-token-expiration-time: 3600000
-  audience: http://localhost
-  issuer: http://localhost
-account:
-  salt: ${ACCOUNT_SALT}
-  pepper: ${ACCOUNT_PEPPER}
+
