@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import pl.backyard.backyardleaguebackend.core.functionality.common.domain.EntityId;
 import pl.backyard.backyardleaguebackend.core.functionality.match.domain.Match;
 
 @AllArgsConstructor
@@ -13,7 +14,7 @@ import pl.backyard.backyardleaguebackend.core.functionality.match.domain.Match;
 @Getter
 @Entity
 @Table(name = "result")
-public class Result {
+public class Result implements EntityId<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

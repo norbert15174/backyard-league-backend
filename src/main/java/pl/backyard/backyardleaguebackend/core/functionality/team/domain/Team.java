@@ -46,4 +46,13 @@ public class Team implements EntityId<Long> {
     public int hashCode() {
         return Objects.hash(getId());
     }
+
+    public void addPoints(long points) {
+        this.points = this.points + points;
+    }
+
+    public void removePoints(long points) {
+        this.points = this.points - points;
+    }
+
 }

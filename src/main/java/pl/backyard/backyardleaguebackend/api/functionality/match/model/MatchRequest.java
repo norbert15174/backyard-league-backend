@@ -1,5 +1,6 @@
 package pl.backyard.backyardleaguebackend.api.functionality.match.model;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,8 +19,8 @@ public class MatchRequest {
     private String comment;
     private Long challengerId;
     private Long challengedId;
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime matchTime;
+    @Schema(description = "Match time in format: yyyy-MM-dd HH:mm:ss")
+    private String matchTime;
 
 
 }

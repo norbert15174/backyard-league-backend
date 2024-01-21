@@ -10,7 +10,6 @@ import pl.backyard.backyardleaguebackend.core.functionality.result.domain.Result
 import pl.backyard.backyardleaguebackend.core.functionality.team.domain.GameType;
 import pl.backyard.backyardleaguebackend.core.functionality.team.domain.Team;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @AllArgsConstructor
@@ -29,10 +28,10 @@ public class Match implements EntityId<Long> {
     @Enumerated(EnumType.STRING)
     private GameType type;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="challenger_id", nullable=false)
+    @JoinColumn(name = "challenger_id", nullable = false)
     private Team challenger;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="challenged_id", nullable=false)
+    @JoinColumn(name = "challenged_id", nullable = false)
     private Team challenged;
     private LocalDateTime challengedAt = LocalDateTime.now();
     private LocalDateTime matchTime;
@@ -40,7 +39,11 @@ public class Match implements EntityId<Long> {
     private MatchStatus status = MatchStatus.REQUESTED;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="result_id")
+    @JoinColumn(name = "result_id")
     private Result result;
 
+    public void addResult(Result entity) {
+        getResult().setMatch(this);
+        this.setResult(entity);
+    }
 }
