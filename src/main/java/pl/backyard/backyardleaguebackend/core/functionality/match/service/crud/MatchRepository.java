@@ -16,6 +16,7 @@ public interface MatchRepository extends JpaRepository<Match, Long>, JpaSpecific
     @Query("select m from Match m " +
             "left join fetch m.challenged cd " +
             "left join fetch m.challenger cr " +
-            "left join fetch m.result ")
+            "left join fetch m.result " +
+            "where m.id = :id")
     Optional<Match> findByIdWithTeamsAndResult(@Param("id") Long id);
 }

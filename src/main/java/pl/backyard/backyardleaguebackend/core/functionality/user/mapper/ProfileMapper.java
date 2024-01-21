@@ -4,13 +4,11 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Page;
 import pl.backyard.backyardleaguebackend.core.functionality.team.dto.TeamBaseDTO;
+import pl.backyard.backyardleaguebackend.core.functionality.user.domain.User;
 import pl.backyard.backyardleaguebackend.core.functionality.user.dto.ProfileDTO;
 import pl.backyard.backyardleaguebackend.core.functionality.user.dto.UserDTO;
-import pl.backyard.backyardleaguebackend.core.functionality.user.domain.User;
-import pl.backyard.backyardleaguebackend.security.functionality.user.context.UserContextHolder;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ProfileMapper {
@@ -27,14 +25,14 @@ public class ProfileMapper {
                 .build();
     }
 
-    public static List<UserDTO> map(Page<User> users) {
-        return users.stream().map(user ->
+    public static Page<UserDTO> map(Page<User> users) {
+        return users.map(user ->
                 UserDTO.builder()
                         .fullName(user.getFullName())
                         .username(user.getUsername())
                         .email(user.getEmail())
                         .id(user.getId())
                         .build()
-        ).collect(Collectors.toList());
+        );
     }
 }

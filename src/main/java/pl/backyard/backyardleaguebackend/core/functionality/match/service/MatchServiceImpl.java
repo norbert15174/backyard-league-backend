@@ -68,8 +68,8 @@ class MatchServiceImpl implements MatchService {
 
         var result = dto.result();
         var entity = new Result();
-        entity.setChallengedScore(entity.getChallengerScore());
-        entity.setChallengedScore(entity.getChallengedScore());
+        entity.setChallengerScore(result.challengerScore());
+        entity.setChallengedScore(result.challengedScore());
 
         var resultStatus = getStatus(result);
         entity.setStatus(resultStatus);

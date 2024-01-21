@@ -19,6 +19,8 @@ import pl.backyard.backyardleaguebackend.core.functionality.match.service.MatchS
 import pl.backyard.backyardleaguebackend.core.functionality.match.service.MatchService;
 import pl.backyard.backyardleaguebackend.core.functionality.result.dto.ResultOpinionDTO;
 
+import java.util.Objects;
+
 @AllArgsConstructor
 @CrossOrigin(origins = "*")
 @RestController
@@ -46,19 +48,20 @@ public class MatchController {
 
     @PutMapping("/{id}")
     public ResponseEntity<MatchDTO> opinion(@PathVariable("id") Long id, @RequestBody MatchOpinionRequest request) {
-        var result = request.getResult();
-        var resultDTO = ResultOpinionDTO.builder()
-                .challengerScore(result.getChallengerScore())
-                .challengedScore(result.getChallengedScore())
-                .build();
-
         var dto = MatchOpinionDTO.builder()
                 .id(id)
-                .status(request.getStatus())
-                .result(resultDTO)
-                .build();
+                .status(request.getStatus());
 
-        return ResponseEntity.ok(matchService.opinion(dto));
+        var result = request.getResult();
+        if(Objects.nonNull(result)){
+            var resultDTO = ResultOpinionDTO.builder()
+                    .challengerScore(result.getChallengerScore())
+                    .challengedScore(result.getChallengedScore())
+                    .build();
+            dto.result(resultDTO);
+        }
+
+        return ResponseEntity.ok(matchService.opinion(dto.build()));
     }
 
 }

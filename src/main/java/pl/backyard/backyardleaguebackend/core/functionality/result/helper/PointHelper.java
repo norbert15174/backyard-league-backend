@@ -11,8 +11,8 @@ import java.util.Objects;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class PointHelper {
 
-    private static final Long BASE_CALC_POINT = 50L;
-    private static final Long BASE_CALC_POINT_FOR_DRAW = 25L;
+    private static final Long BASE_CALC_POINT = 100L;
+    private static final Long BASE_CALC_POINT_FOR_DRAW = 50L;
 
     public static void calcChallengerPoints(Result result, Team challenger, Team challenged) {
         var ratioChallenger = ((double) (challenger.getPoints())) / ((double) (challenged.getPoints()));

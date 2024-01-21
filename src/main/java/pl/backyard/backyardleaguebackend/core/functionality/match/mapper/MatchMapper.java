@@ -4,8 +4,11 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import pl.backyard.backyardleaguebackend.core.functionality.match.domain.Match;
 import pl.backyard.backyardleaguebackend.core.functionality.match.dto.MatchDTO;
+import pl.backyard.backyardleaguebackend.core.functionality.result.dto.ResultDTO;
 import pl.backyard.backyardleaguebackend.core.functionality.team.domain.Team;
 import pl.backyard.backyardleaguebackend.core.functionality.team.service.TeamSearchService;
+
+import java.util.Objects;
 
 @AllArgsConstructor
 @Component
@@ -17,7 +20,8 @@ public class MatchMapper {
         var challengedDTO = teamSearchService.getTeamInformation(challenged.getId());
         var challengerDTO = teamSearchService.getTeamInformation(challenger.getId());
 
-        return MatchDTO.builder()
+
+        var matchDTO = MatchDTO.builder()
                 .id(match.getId())
                 .location(match.getLocation())
                 .comment(match.getComment())
@@ -26,8 +30,19 @@ public class MatchMapper {
                 .challenged(challengedDTO)
                 .challenger(challengerDTO)
                 .status(match.getStatus())
-                .type(match.getType())
-                .build();
+                .type(match.getType());
+
+        if (Objects.nonNull(match.getResult())) {
+            var result = match.getResult();
+            var resultDTO = ResultDTO.builder()
+                    .challengedScore(result.getChallengedScore())
+                    .challengerScore(result.getChallengerScore())
+                    .status(result.getStatus())
+                    .build();
+            matchDTO.result(resultDTO);
+        }
+
+        return matchDTO.build();
     }
 
 }

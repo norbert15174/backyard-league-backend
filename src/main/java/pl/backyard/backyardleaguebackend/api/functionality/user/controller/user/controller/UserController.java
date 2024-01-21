@@ -1,6 +1,7 @@
 package pl.backyard.backyardleaguebackend.api.functionality.user.controller.user.controller;
 
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -26,7 +27,7 @@ public class UserController {
     private final UserSearchService userSearchService;
 
     @GetMapping
-    public ResponseEntity<List<UserDTO>> getAll(@PageableDefault(size = 10, page = 0, sort = "username", direction = Sort.Direction.ASC) Pageable pageable, UserSearchCriteria criteria) {
+    public ResponseEntity<Page<UserDTO>> getAll(@PageableDefault(size = 10, page = 0, sort = "username", direction = Sort.Direction.ASC) Pageable pageable, UserSearchCriteria criteria) {
         var filter = new UserSpecification().getFilter(criteria);
         return ResponseEntity.ok(ProfileMapper.map(userQueryService.getAll(filter, pageable)));
     }

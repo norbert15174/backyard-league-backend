@@ -43,7 +43,7 @@ public class Match implements EntityId<Long> {
     private Result result;
 
     public void addResult(Result entity) {
-        getResult().setMatch(this);
         this.setResult(entity);
+        getResult().setMatch(this);
     }
 }
