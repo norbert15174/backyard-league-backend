@@ -3,7 +3,7 @@ spring:
     driver-class-name: org.postgresql.Driver
     type: com.zaxxer.hikari.HikariDataSource
     hikari:
-      schema: backyardleague
+      schema: ${DB_SCHEMA}
     url: ${DB_URL}
     username: ${DB_LOGIN}
     password: ${DB_PASSWORD}
