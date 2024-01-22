@@ -1,0 +1,44 @@
+version: '3'
+ 
+services:
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_PASSWORD: admin
+      POSTGRES_USER: admin
+      POSTGRES_DB: zpi
+    volumes:
+    - postgres_data:/var/lib/postgresql/data
+  keycloak:
+    image: quay.io/keycloak/keycloak:20.0
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://postgres/zpi
+      KC_DB_SCHEMA: public
+      KC_DB_USERNAME: admin
+      KC_DB_PASSWORD: admin
+    ports:
+      - 8080:8080
+    command:
+      - start-dev
+  frontend:
+    image: zpi-front:1.0
+    ports:
+      - "80:80" 
+    depends_on:
+     - backend
+  backend:
+    image: zpi-backend:1.0
+    environment:
+      DB_SCHEMA: public
+      DB_URL: jdbc:postgresql://postgres/zpi
+      DB_LOGIN: admin
+      DB_PASSWORD: admin
+      KEY_CLOAK_ISSUER_URL: http://localhost:8080/realms/zpi
+    depends_on:
+      - postgres
+      - keycloak
+volumes:
+  postgres_data:
