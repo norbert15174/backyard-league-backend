@@ -17,32 +17,33 @@ public class PointHelper {
     public static void calcChallengerPoints(Result result, Team challenger, Team challenged) {
         var ratioChallenger = ((double) (challenger.getPoints())) / ((double) (challenged.getPoints()));
         var ratioChallenged = ((double) (challenged.getPoints())) / ((double) (challenger.getPoints()));
+
         if (Objects.equals(result.getChallengedScore(), result.getChallengerScore())) {
-            var points = calcPoints(ratioChallenger, ratioChallenged, BASE_CALC_POINT_FOR_DRAW);
-            challenger.addPoints(points);
-            challenged.addPoints(points);
+            challenger.addPoints(Math.round(ratioChallenger * BASE_CALC_POINT_FOR_DRAW));
+            challenged.addPoints(Math.round(ratioChallenged * BASE_CALC_POINT_FOR_DRAW));
             return;
         }
 
-        var points = calcPoints(ratioChallenger, ratioChallenged, BASE_CALC_POINT);
+
+
         if (Objects.equals(result.getStatus(), ResultStatus.CHALLENGER_WON)) {
-            challenger.addPoints(points);
-            challenged.removePoints(points);
+            var ratioForWinner = challenger.getPoints() > challenged.getPoints()
+                    ? Math.min(ratioChallenger, ratioChallenged)
+                    : Math.max(ratioChallenger, ratioChallenged);
+            challenger.addPoints(calcPoints(ratioForWinner, BASE_CALC_POINT));
+            challenged.removePoints(calcPoints(ratioChallenged, BASE_CALC_POINT));
             return;
         }
 
-        challenger.removePoints(points);
-        challenged.addPoints(points);
+        var ratioForWinner = challenged.getPoints() > challenger.getPoints()
+                ? Math.min(ratioChallenger, ratioChallenged)
+                : Math.max(ratioChallenger, ratioChallenged);
+        challenger.removePoints(calcPoints(ratioChallenger, BASE_CALC_POINT));
+        challenged.addPoints(calcPoints(ratioForWinner, BASE_CALC_POINT));
     }
 
-    private static Long calcPoints(double ratio1, double ratio2, Long points) {
-        if (ratio1 == ratio2) {
-            return points;
-        }
-
-        var points1 = Math.round(ratio1 * points);
-        var points2 = Math.round(ratio2 * points);
-        return Math.abs(points1 - points2);
+    private static long calcPoints(double winnerRatio, Long points) {
+        return Math.round(winnerRatio * points);
     }
 
 }

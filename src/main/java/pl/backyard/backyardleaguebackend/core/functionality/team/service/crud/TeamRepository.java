@@ -25,7 +25,7 @@ public interface TeamRepository extends JpaRepository<Team, Long>, JpaSpecificat
             "where t.id = :id")
     Optional<Team> findByIdWithMembers(@Param("id") Long id);
 
-    @Query("SELECT COUNT(t) FROM Team t WHERE t.type = :type and t.points > :points OR (t.points = :points AND t.id < :teamId)")
+    @Query("SELECT COUNT(t) FROM Team t WHERE t.type = :type and t.points > :points OR (t.points = :points AND t.id < :teamId AND t.type = :type)")
     long countTeamsWithMorePoints(@Param("points") Long points, @Param("teamId") Long teamId, @Param("type") GameType type);
 
 }
