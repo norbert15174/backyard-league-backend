@@ -7,11 +7,14 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.Errors;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import pl.backyard.backyardleaguebackend.api.functionality.match.model.MatchOpinionRequest;
 import pl.backyard.backyardleaguebackend.api.functionality.match.model.MatchRequest;
 import pl.backyard.backyardleaguebackend.api.functionality.match.specification.MatchSearchCriteria;
 import pl.backyard.backyardleaguebackend.api.functionality.match.specification.MatchSpecification;
+import pl.backyard.backyardleaguebackend.core.functionality.common.validator.custom.MatchOpinionValidator;
 import pl.backyard.backyardleaguebackend.core.functionality.match.dto.MatchBaseDTO;
 import pl.backyard.backyardleaguebackend.core.functionality.match.dto.MatchDTO;
 import pl.backyard.backyardleaguebackend.core.functionality.match.dto.MatchOpinionDTO;
@@ -21,6 +24,7 @@ import pl.backyard.backyardleaguebackend.core.functionality.result.dto.ResultOpi
 
 import java.util.Objects;
 
+@Validated
 @AllArgsConstructor
 @CrossOrigin(origins = "*")
 @RestController
@@ -29,14 +33,15 @@ public class MatchController {
 
     private final MatchService matchService;
     private final MatchSearchService matchSearchService;
+    private final MatchOpinionValidator matchOpinionValidator;
 
     @PostMapping
-    public ResponseEntity<MatchDTO> create(@RequestBody MatchRequest request) {
+    public ResponseEntity<MatchDTO> create(@Validated @RequestBody MatchRequest request) {
         return new ResponseEntity<>(matchService.create(request), HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<Page<MatchBaseDTO>> get(@PageableDefault(size = 10, page = 0, sort = "matchTime", direction = Sort.Direction.DESC) Pageable pageable, MatchSearchCriteria criteria) {
+    public ResponseEntity<Page<MatchBaseDTO>> get(@PageableDefault(size = 10, page = 0, sort = "matchTime", direction = Sort.Direction.ASC) Pageable pageable, MatchSearchCriteria criteria) {
         var spec = new MatchSpecification().getFilter(criteria);
         return ResponseEntity.ok(matchSearchService.getAll(spec, pageable));
     }
@@ -47,13 +52,13 @@ public class MatchController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<MatchDTO> opinion(@PathVariable("id") Long id, @RequestBody MatchOpinionRequest request) {
+    public ResponseEntity<MatchDTO> opinion(@PathVariable("id") Long id, @Validated @RequestBody MatchOpinionRequest request, Errors errors) {
         var dto = MatchOpinionDTO.builder()
                 .id(id)
                 .status(request.getStatus());
 
         var result = request.getResult();
-        if(Objects.nonNull(result)){
+        if (Objects.nonNull(result)) {
             var resultDTO = ResultOpinionDTO.builder()
                     .challengerScore(result.getChallengerScore())
                     .challengedScore(result.getChallengedScore())
@@ -63,5 +68,6 @@ public class MatchController {
 
         return ResponseEntity.ok(matchService.opinion(dto.build()));
     }
+
 
 }

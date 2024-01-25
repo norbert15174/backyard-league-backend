@@ -1,5 +1,6 @@
 package pl.backyard.backyardleaguebackend.api.functionality.match.model;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,6 +13,7 @@ import pl.backyard.backyardleaguebackend.core.functionality.match.dto.MatchOpini
 @Getter
 public class MatchOpinionRequest {
 
+    @NotNull
     private MatchOpinionStatus status;
     private Result result;
 

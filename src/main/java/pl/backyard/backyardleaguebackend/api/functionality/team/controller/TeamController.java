@@ -7,11 +7,13 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import pl.backyard.backyardleaguebackend.api.functionality.team.model.TeamCreateRequest;
 import pl.backyard.backyardleaguebackend.api.functionality.team.model.TeamJoinRequest;
 import pl.backyard.backyardleaguebackend.api.functionality.team.specification.TeamSearchCriteria;
 import pl.backyard.backyardleaguebackend.api.functionality.team.specification.TeamSpecification;
+import pl.backyard.backyardleaguebackend.core.functionality.common.validator.common.annotation.UserHasAccessToTeam;
 import pl.backyard.backyardleaguebackend.core.functionality.team.dto.TeamCodeDTO;
 import pl.backyard.backyardleaguebackend.core.functionality.team.dto.TeamDTO;
 import pl.backyard.backyardleaguebackend.core.functionality.team.dto.TeamInformationDTO;
@@ -20,6 +22,7 @@ import pl.backyard.backyardleaguebackend.core.functionality.team.service.TeamSea
 import pl.backyard.backyardleaguebackend.core.functionality.team.service.TeamService;
 import pl.backyard.backyardleaguebackend.core.functionality.team.service.crud.TeamQueryService;
 
+@Validated
 @AllArgsConstructor
 @CrossOrigin(origins = "*")
 @RestController
@@ -30,18 +33,19 @@ public class TeamController {
     private final TeamQueryService teamQueryService;
     private final TeamSearchService teamSearchService;
 
+
     @PostMapping
-    public ResponseEntity<TeamDTO> create(@RequestBody TeamCreateRequest request) {
+    public ResponseEntity<TeamDTO> create(@Validated @RequestBody TeamCreateRequest request) {
         return new ResponseEntity<>(teamService.create(request), HttpStatus.CREATED);
     }
 
     @PostMapping("/join")
-    public ResponseEntity<TeamDTO> join(@RequestBody TeamJoinRequest request) {
+    public ResponseEntity<TeamDTO> join(@Validated @RequestBody TeamJoinRequest request) {
         return new ResponseEntity<>(teamService.join(request), HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}/code")
-    public ResponseEntity<TeamCodeDTO> getCode(@PathVariable Long id) {
+    public ResponseEntity<TeamCodeDTO> getCode(@UserHasAccessToTeam @PathVariable Long id) {
         return new ResponseEntity<>(teamQueryService.getCodeById(id), HttpStatus.OK);
     }
 
@@ -57,18 +61,16 @@ public class TeamController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<TeamInformationDTO> delete(@PathVariable Long id) {
+    public ResponseEntity<TeamInformationDTO> delete(@UserHasAccessToTeam @PathVariable Long id) {
         teamService.delete(id);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{id}/leave")
-    public ResponseEntity<TeamInformationDTO> leave(@PathVariable Long id) {
+    public ResponseEntity<TeamInformationDTO> leave(@UserHasAccessToTeam @PathVariable Long id) {
         teamService.leave(id);
         return ResponseEntity.ok().build();
     }
-
-
 
 
 }
